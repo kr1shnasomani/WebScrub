@@ -7,7 +7,18 @@ This project scrapes website data (both dynamic and static), processes the HTML 
    pip install requests selenium beautifulsoup4 json html2text
    ```
 
-2. 
+2. Go to the site **https://googlechromelabs.github.io/chrome-for-testing/** and install ChromeDriver
+   Note: Make sure the ChromeDriver you are using is the same version as the Google Chrome. If not your code will output an error.
+
+3. Copy and paste the path of the ChromeDrive in the code in `scraper.py`
+
+4. Enter the link of the page whose data you want to get scrapped in `scraper.py`
+
+5. Run `scraper.py` and it will give `html.json` file as an output with the HTML content of the page
+
+6. Copy the path of `html.json` file and the place you want to store the resultant file (clean text file) and paste it in the `htmltotext.py` code
+
+7. Upon running this script it will output a file named `text.json` (this file contains the clean text)
 
 ## Overview:
 The two code snippets together outline a complete process for scraping and converting website content from HTML to plain text.
