@@ -1,4 +1,4 @@
-# Web Scraper
+<h1 align="center">WebScrub</h1>
 This project scrapes website data (both dynamic and static), processes the HTML content to retain links, images, and emphasis, and then cleans it. The cleaned text is saved in a structured JSON format for easy access and further processing.
 
 ## Execution Guide:
