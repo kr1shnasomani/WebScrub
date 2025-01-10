@@ -1,10 +1,10 @@
 <h1 align="center">WebScrub</h1>
-This project scrapes website data (both dynamic and static), processes the HTML content to retain links, images, and emphasis, and then cleans it. The cleaned text is saved in a structured JSON format for easy access and further processing.
+This project is a modular pipeline for web scraping, text cleaning, and NLP-based analysis. It extracts meaningful content, keywords, entities, and statistics from websites using Selenium, spaCy and TF-IDF. Outputs include structured JSON files for insights, suitable for content analysis, research and NLP-driven applications.
 
 ## Execution Guide:
 1. Run the following command in the terminal:
    ```
-   pip install requests selenium beautifulsoup4 json html2text
+   pip install requests selenium html2text spacy scikit-learn
    ```
 
 2. Go to the site **https://googlechromelabs.github.io/chrome-for-testing/** and install ChromeDriver
@@ -20,19 +20,59 @@ This project scrapes website data (both dynamic and static), processes the HTML 
 
 7. Upon running this script it will output a file named `text.json` (this file contains the clean text)
 
+8. Now if the path of this `text.json` is entered into the code `preprocess.py` code then it outputs a pre-processed file named `preprocessed.json`
+
 ## Overview:
-The two code snippets together outline a complete process for scraping and converting website content from HTML to plain text.
+The project implements a modular system to scrape web content, process it into clean, readable formats, and extract meaningful information using Natural Language Processing (NLP) techniques. The pipeline is structured into three distinct components, each addressing a specific stage in the content lifecycle.
 
-1. **Web Scraping (Code 1)**:  
-   - The `scrape_website` function fetches the content of a website. If the website is **static**, it uses `requests` to retrieve the HTML content. For **dynamic websites** (where content is loaded via JavaScript), the function uses **Selenium** with a Chrome WebDriver to load the page and capture the rendered HTML after it has fully loaded.  
-   - After scraping the website, the content is saved to a JSON file (`html.json`) using the `save_content_to_json` function, which ensures the content is stored in a structured JSON format.
+### **1. Scraper Component (scraper.py)**
 
-2. **HTML to Plain Text Conversion (Code 2)**:  
-   - The second script processes the HTML content saved in `html.json`. It uses **`html2text`** to convert the HTML into readable plain text. The `HTML2Text` object is configured to retain links, images, and emphasis (bold/italic) while ensuring no text wrapping occurs (i.e., it avoids truncating lines). This results in the entire raw content being converted to a readable text format.
-   - The cleaned text is then saved into a new JSON file (`text.json`), maintaining the structure but with plain text instead of HTML.
+**Purpose**: To scrape web content from dynamic or static websites.
 
-**Combined Workflow**:
-   - First, **Code 1** scrapes the HTML content from a dynamic or static website and stores it in `html.json`.
-   - Then, **Code 2** loads the HTML from the JSON file, converts it into plain text while preserving key elements like links and emphasis, and saves the cleaned text into a new file, `text.json`.
+- **Key Features**:
+  - **Dynamic Content Handling**: Uses Selenium WebDriver for rendering JavaScript-based dynamic web pages.
+  - **Static Content Handling**: Uses `requests` for straightforward HTTP requests to fetch HTML content.
+  - **Output**: Saves the raw HTML content as a JSON file for further processing.
 
-This two-step process allows for the efficient scraping of static and dynamic websites and the extraction of human-readable content from raw HTML.
+- **Workflow**:
+  1. Determines the type of web page (dynamic/static).
+  2. Fetches the HTML content.
+  3. Saves the content to a specified JSON file.
+
+### **2. HTML-to-Text Conversion (htmltotext.py)**
+
+**Purpose**: To clean and convert raw HTML content into plain text while preserving critical formatting and information.
+
+- **Key Features**:
+  - **Preservation**: Links, images, and emphasis are retained.
+  - **Customization**: Optional ignoring of specific HTML elements like links and images.
+  - **Output**: Saves cleaned text as JSON for downstream processing.
+
+- **Workflow**:
+  1. Reads raw HTML content from the scraper's output.
+  2. Uses `html2text` to convert HTML into readable plain text.
+  3. Saves the cleaned text as a JSON file.
+
+### **3. Preprocessing and NLP Pipeline (preprocess.py)**
+
+**Purpose**: To extract meaningful content, key terms, entities, and statistics from the cleaned text.
+
+- **Key Features**:
+  - **Text Cleaning**: Removes URLs, HTML tags, special characters, and boilerplate terms (e.g., "menu," "click").
+  - **NLP-Based Processing**: Utilizes spaCy for tokenization, lemmatization, and Named Entity Recognition (NER).
+  - **Meaningful Content Extraction**: Filters out uninformative sentences using criteria like word count, length, and relevance.
+  - **TF-IDF Analysis**: Identifies top keywords using TF-IDF Vectorizer.
+  - **Entity Categorization**: Groups named entities (e.g., "PERSON," "ORG") into categories.
+  - **Statistics**: Computes statistics like the number of meaningful sections and unique terms.
+  - **Output**: Saves processed data as JSON for easy integration into downstream tasks.
+
+- **Workflow**:
+  1. Reads the cleaned text from the HTML-to-text component's output.
+  2. Processes content to extract:
+     - Meaningful sentences.
+     - Key terms (lemmas of informative words).
+     - Named entities with categories.
+  3. Generates keywords and statistics for summarization.
+  4. Saves the processed data into a structured JSON file.
+
+This project demonstrates a robust pipeline to transform raw web content into actionable insights, suitable for applications in content analytics, research, and NLP-driven solutions.
