@@ -1,0 +1,5 @@
+requests 
+selenium 
+html2text 
+spacy 
+scikit-learn
